@@ -79,7 +79,8 @@ app.layout = html.Div([
                             start_date=q1.date.min(),
                             end_date=q1.date.max()),
         dcc.Graph(id='q1-graph')
-    ], style={"border": "1px black solid", 'width': '48%', 'display': 'inline-block'}),
+    ], style={"border": "1px black solid", 'width': '44%', 'display': 'inline-block', 
+              'padding':'2vh 2vw'}),
 
     #Q2
     html.Div([
@@ -101,7 +102,8 @@ app.layout = html.Div([
                      value='Daily'),
         dcc.Graph(id='q2-graph'),
 
-    ], style={"border": "1px black solid", 'width': '48%', 'display': 'inline-block'})]),
+    ], style={"border": "1px black solid", 'width': '44%', 'display': 'inline-block', 
+              'padding':'2vh 2vw'})]),
 
     #Q3
     html.Div([
@@ -115,7 +117,8 @@ app.layout = html.Div([
                             end_date=q3.date.max()),
         dcc.Graph(id='q3-graph'),
 
-    ], style={"border": "1px black solid", 'width': '96%'}),
+    ], style={"border": "1px black solid", 'width': '90%', 
+              'padding':'2vh 4vw'}),
     
     
     #Q4
@@ -128,7 +131,8 @@ app.layout = html.Div([
                             start_date=q4.date.min(),
                             end_date=q4.date.max()),
         dcc.Graph(id='q4-graph'),
-    ], style={"border": "1px black solid", 'width': '48%', 'display': 'inline-block'}),
+    ], style={"border": "1px black solid", 'width': '44%', 'display': 'inline-block', 
+              'padding':'2vh 2vw'}),
     
     #Q5
     #Make it a relation between x=total_cases vs y=total_deaths
@@ -143,7 +147,8 @@ app.layout = html.Div([
                             end_date=q5.date.max()),
         dcc.Graph(id='q5-graph'),
 
-    ], style={"border": "1px black solid", 'width': '48%', 'display': 'inline-block'})]),
+    ], style={"border": "1px black solid", 'width': '44%', 'display': 'inline-block',
+              'padding':'2vh 2vw'})]),
     
 
 ])
