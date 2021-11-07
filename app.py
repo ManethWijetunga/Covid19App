@@ -13,8 +13,7 @@ from dash.dependencies import Input, Output, State
 display(HTML("<style>.container { width:90% !important; }</style>"))
 
 #Importing data set
-covid = pd.read_csv(
-    "/Users/manethwijetunga/group_analytics/owid-covid-data.csv")
+covid = pd.read_csv('/Users/manethwijetunga/group_analytics/owid-covid-data.csv')
 
 #Doing necessary changes to the dataset
 q1_columns = ['date', 'total_cases', 'new_cases', 'new_deaths', 'total_deaths']
@@ -34,8 +33,8 @@ srilanka = srilanka.drop('location', axis=1)
 srilanka.insert(0, 'location', ['SL']*len(srilanka))
 # sl
 
-RoW = world.iloc[:, 1:] - srilanka.iloc[:, 1:]
-RoW.insert(0, 'location', ['RoW']*len(RoW))
+RestofTheWorld = world.iloc[:, 1:] - srilanka.iloc[:, 1:]
+RestofTheWorld.insert(0, 'location', ['RestofTheWorld']*len(RestofTheWorld))
 # RoW
 
 saark_countries = ['Afghanistan', 'Bangladesh', 'Bhutan',
@@ -47,22 +46,22 @@ saark.insert(0, 'location', ['SAARK']*len(saark))
 asia = covid[covid.location == 'Asia'].loc[:, q2_columns].set_index('date')
 # asia
 
-q2 = pd.concat([srilanka, RoW, saark, asia]).reset_index()
+q2 = pd.concat([srilanka, RestofTheWorld, saark, asia]).reset_index()
 q2.date = pd.to_datetime(q2.date)
 
 q3 = covid.loc[:, ['date', 'location']]
 q3['test_to_detection'] = covid.new_tests/covid.new_cases
 q3
 
-q4 = covid.loc[:, ['date', 'location']]
+q4 = covid.loc[:, ['date', 'location', 'new_cases', 'new_tests']]
 q4
 
-q5 = covid.loc[:, ['date', 'location']]
-q3['death_to_case'] = covid.total_deaths/covid.total_cases
+q5 = covid.loc[:, ['date', 'location', 'population', 'life_expectancy' ]]
+q5['death_to_case'] = covid.total_deaths/covid.total_cases
 q5
 
 
-app = dash.Dash(__name__)
+app = dash.Dash(__name__, assets_external_path='styling.css')
 
 #Layout of the web app
 app.layout = html.Div([
@@ -70,6 +69,8 @@ app.layout = html.Div([
 
     # Q1
     html.Div([
+    html.Div([
+        html.H2("Worldwide Changes"),
         dcc.Dropdown(id='q1-dropdown',
                      options=[{'label': i.replace('_', ' '), 'value': i}
                               for i in q1_columns[1:]],
@@ -78,10 +79,12 @@ app.layout = html.Div([
                             start_date=q1.date.min(),
                             end_date=q1.date.max()),
         dcc.Graph(id='q1-graph')
-    ], style={"border": "1px black solid", 'width': '48%'}),
+    ], style={"border": "1px black solid", 'width': '44%', 'display': 'inline-block', 
+              'padding':'2vh 2vw'}),
 
     #Q2
     html.Div([
+        html.H2("Sri Lanka vs Worldwide Changes"),
         dcc.Dropdown(id='q2-variable-dropdown',
                      options=[
                          {'label': i.replace('_', ' '), 'value': i} for i in q2_columns[2:]],
@@ -99,10 +102,12 @@ app.layout = html.Div([
                      value='Daily'),
         dcc.Graph(id='q2-graph'),
 
-    ], style={"border": "1px black solid", 'width': '48%'}),
+    ], style={"border": "1px black solid", 'width': '44%', 'display': 'inline-block', 
+              'padding':'2vh 2vw'})]),
 
     #Q3
     html.Div([
+        html.H2("Test to Detection"),
         dcc.Dropdown(id='location',
                      options=[{'label': i, 'value': i}
                               for i in q3.location.unique()],
@@ -112,25 +117,28 @@ app.layout = html.Div([
                             end_date=q3.date.max()),
         dcc.Graph(id='q3-graph'),
 
-    ], style={"border": "1px black solid", 'width': '48%'}),
+    ], style={"border": "1px black solid", 'width': '90%', 
+              'padding':'2vh 4vw'}),
     
     
     #Q4
     #Make it a scatter plot
     #Include the corelation between the variables
     html.Div([
-        html.H2("Tests vs New cases for SriLanka"),
+    html.Div([
+        html.H2("Tests vs New cases"),
         dcc.DatePickerRange(id='q4-datepickerrange',
                             start_date=q4.date.min(),
                             end_date=q4.date.max()),
         dcc.Graph(id='q4-graph'),
-    ], style={"border": "1px black solid", 'width': '48%'}),
+    ], style={"border": "1px black solid", 'width': '44%', 'display': 'inline-block', 
+              'padding':'2vh 2vw'}),
     
     #Q5
     #Make it a relation between x=total_cases vs y=total_deaths
     html.Div([
-        
-        dcc.Dropdown(id='location',
+        html.H2("Total cases to Total deaths"),
+        dcc.Dropdown(id='location2',
                      options=[{'label': i, 'value': i}
                               for i in q5.location.unique()],
                      value='Sri Lanka'),
@@ -139,7 +147,8 @@ app.layout = html.Div([
                             end_date=q5.date.max()),
         dcc.Graph(id='q5-graph'),
 
-    ], style={"border": "1px black solid", 'width': '48%'}),
+    ], style={"border": "1px black solid", 'width': '44%', 'display': 'inline-block',
+              'padding':'2vh 2vw'})]),
     
 
 ])
@@ -153,7 +162,7 @@ app.layout = html.Div([
 def update_q1_fig(variable, start_date, end_date):
     #Filtering the date range and creating graph
     fig = px.line(data_frame=q1[(q1.date >= start_date) & (q1.date <= end_date)],
-                  x='date', y=variable, title="Worldwide Changes", color='location')
+                  x='date', y=variable, title="Worldwide Changes")
     fig.layout.title.x = 0.5
     #Axis labels
     fig.update_layout(xaxis_title='<b>Date</b>',yaxis_title=f'<b>{variable.replace("_", " ")}</b>')
@@ -232,21 +241,30 @@ def update_q3_fig(location, start_date, end_date):
 def update_q4_fig(location, start_date, end_date):
      #Filtering the date range and location
     df = q4[(q4.location == location) & (q4.date >= start_date) & (q4.date <= end_date)]
+    cor = round(df[['new_tests', 'new_cases']].corr()['new_cases'][0], 2)
     #Creating the graph
-    fig = px.scatter(df, x='date', y='test_to_detection',title='Test to detection ratio')
+    fig = px.scatter(df, x='new_tests', y='new_cases',title='Test to detection ratio')
      #Axis labels
     fig.update_layout(xaxis_title='<b>Date</b>',yaxis_title=f'<b>Test to detection ratio</b>')
     fig.layout.title.x = 0.5
+    fig.add_annotation(x=max(df['new_tests']), y=max(df['new_cases']),
+                        text="Correlation: {}".format(cor),
+                        font=dict(
+                            family="Courier New, monospace",
+                            size=25,
+                            color="#ff7f0e"
+                        ),
+                        showarrow=False,
+                        arrowhead=1)
     return fig
 
 #Callback for q5
 @app.callback(Output('q5-graph', 'figure'),
-              Input('location', 'value'),
+              Input('location2', 'value'),
               Input('q5-datepickerrange', 'start_date'),
               Input('q5-datepickerrange', 'end_date'))
 
 #Update function for graph 5
-#Have date range and select location, show the death to case ratio
 def update_q5_fig(location, start_date, end_date):
      #Filtering the date range and location
     df = q5[(q5.location == location) & (q5.date >= start_date) & (q5.date <= end_date)]
@@ -254,13 +272,14 @@ def update_q5_fig(location, start_date, end_date):
     #Creating the graph
     fig = px.bar(df, x='date', y='death_to_case',title='Death to case ratio', color='death_to_case',
                  hover_data=['population', 'life_expectancy'],)
-     #Axis labels
+    #Axis labels
     fig.update_layout(xaxis_title='<b>Date</b>',yaxis_title=f'<b>Death to case ratio</b>')
     fig.layout.title.x = 0.5
+    
     return fig
 
 
 
 
 if __name__ == '__main__':
-    app.run_server(port=6002)
+    app.run_server(debug=True)
