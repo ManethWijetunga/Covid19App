@@ -13,8 +13,8 @@ from dash.dependencies import Input, Output, State
 display(HTML("<style>.container { width:90% !important; }</style>"))
 
 #Importing data set
-chunksize=40000
-covid = pd.read_csv('/Users/manethwijetunga/group_analytics/owid-covid-data.csv', chunksize=chunksize, iterator=True)
+chunksize=30000
+covid = pd.read_csv('owid-covid-data.csv', chunksize=chunksize)
 
 #Doing necessary changes to the dataset
 q1_columns = ['date', 'total_cases', 'new_cases', 'new_deaths', 'total_deaths']
@@ -278,6 +278,8 @@ def update_q5_fig(location, start_date, end_date):
     fig.layout.title.x = 0.5
     
     return fig
+
+
 
 
 if __name__ == '__main__':
