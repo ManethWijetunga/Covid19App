@@ -13,7 +13,8 @@ from dash.dependencies import Input, Output, State
 display(HTML("<style>.container { width:90% !important; }</style>"))
 
 #Importing data set
-covid = pd.read_csv('/Users/manethwijetunga/group_analytics/owid-covid-data.csv')
+chunksize=40000
+covid = pd.read_csv('/Users/manethwijetunga/group_analytics/owid-covid-data.csv', chunksize=chunksize, iterator=True)
 
 #Doing necessary changes to the dataset
 q1_columns = ['date', 'total_cases', 'new_cases', 'new_deaths', 'total_deaths']
