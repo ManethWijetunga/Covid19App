@@ -66,7 +66,7 @@ app = dash.Dash(__name__, assets_external_path='styling.css')
 
 #Layout of the web app
 app.layout = html.Div([
-    html.H1(id='header', children=['COVID-19 Dashboard']),
+    html.H1(id='header', children=['COVID-19 Dashboard by Maneth']),
 
     # Q1
     html.Div([
@@ -80,7 +80,7 @@ app.layout = html.Div([
                             start_date=q1.date.min(),
                             end_date=q1.date.max()),
         dcc.Graph(id='q1-graph')
-    ], style={"border": "1px black solid", 'width': '44%', 'display': 'inline-block', 
+    ], style={'width': '44%', 'display': 'inline-block', 
               'padding':'2vh 2vw'}),
 
     #Q2
@@ -103,7 +103,7 @@ app.layout = html.Div([
                      value='Daily'),
         dcc.Graph(id='q2-graph'),
 
-    ], style={"border": "1px black solid", 'width': '44%', 'display': 'inline-block', 
+    ], style={'width': '44%', 'display': 'inline-block', 
               'padding':'2vh 2vw'})]),
 
     #Q3
@@ -118,7 +118,7 @@ app.layout = html.Div([
                             end_date=q3.date.max()),
         dcc.Graph(id='q3-graph'),
 
-    ], style={"border": "1px black solid", 'width': '90%', 
+    ], style={'width': '90%', 
               'padding':'2vh 4vw'}),
     
     
@@ -132,7 +132,7 @@ app.layout = html.Div([
                             start_date=q4.date.min(),
                             end_date=q4.date.max()),
         dcc.Graph(id='q4-graph'),
-    ], style={"border": "1px black solid", 'width': '44%', 'display': 'inline-block', 
+    ], style={'width': '44%', 'display': 'inline-block', 
               'padding':'2vh 2vw'}),
     
     #Q5
@@ -148,7 +148,7 @@ app.layout = html.Div([
                             end_date=q5.date.max()),
         dcc.Graph(id='q5-graph'),
 
-    ], style={"border": "1px black solid", 'width': '44%', 'display': 'inline-block',
+    ], style={'width': '44%', 'display': 'inline-block',
               'padding':'2vh 2vw'})]),
     
 
